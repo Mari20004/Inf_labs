@@ -1,11 +1,9 @@
 from math import log10
 
-
 # Вычисление простого арифметического выражения со знаками "+-*:/"
 # без скобок с учетом приоритета операций
 def schet(arr):
     res = 0
-
     for w in ["*:/", "+-"]:
         c = 0
         for q in range(len(arr[:])):
@@ -47,7 +45,7 @@ def prime(a):
                 elif a[q][w] == ")":
                     za += 1
                 if za > ot: break
-            a[q] = str(log10(int(prime(a[q][:w])))) + a[q][w + 1:]
+            a[q] = str(log10(float(prime(a[q][:w])))) + a[q][w + 1:]
     a = ''.join(a)
 
     for q in range(len(a[:])):
@@ -68,7 +66,7 @@ def prime(a):
         for q in range(len(arr)):
             if arr[q] == ")":
                 break
-        for w in range(len(arr[:q]), 0, -1):
+        for w in range(len(arr[:q]), -1, -1):
             if arr[w] == "(":
                 break
         res = schet(arr[w + 1:q])
@@ -78,21 +76,27 @@ def prime(a):
     itog = schet(arr)
     return itog
 
+try:
+    print("Здравствуйте, это калькулятор арифметических выражений\n"
+          "Введите пример, который необходимо вычислить")
 
-print("Здравствуйте, это калькулятор арифметических выражений\n"
-      "Введите пример, который необходимо вычислить")
-
-a = input()
-
-if a == "":
-    a = "log10(1+9) + (7 * 6) - 3 * (1 + 32 - 33) + log10(10)"  # Пример выражения на случай пустой строки
-print(prime(a))
-
-while len("".join(a.split("log10("))) != len([i for i in "".join(a.split("log10(")) if i in " 0123456789()+-*/:"]):
-    print("Введенный пример содержит лишние символы, пожалуйста используйте только арабские цифры,\n"
-          "знаки арифметических операций (+-:/*) и скобки\n"
-          "Введите пример снова")
     a = input()
-    if a == "":
-        a = "1 + (7 * 6) - 3 * (1 + 32 - 33)"
-    print(prime(a))
+
+
+    if len("".join(a.split("log10("))) != len([i for i in "".join(a.split("log10(")) if i in " 0123456789()+-*/:<=."]):
+        print("Введенный пример содержит лишние символы, пожалуйста используйте только арабские цифры,\n"
+              "знаки арифметических операций (+-:/*) и скобки, а так же логическое <=\n"
+              "Введите пример снова")
+        a = input()
+        if ("<=" in a) and a:
+            print(prime(a.split("<=")[0]) <= prime(a.split("<=")[1]))
+        elif a:
+            print(prime(a))
+    else:
+        if ("<=" in a) and a:
+            print(prime(a.split("<=")[0]) <= prime(a.split("<=")[1]))
+        elif a:
+            print(prime(a))
+except: print("Введите пример, который необходимо вычислить, прошлый содержит ошибку")
+
+# log10(1+9) + (7 * 6) - 3 <= (1 + 32 - 33) + log10(10)
